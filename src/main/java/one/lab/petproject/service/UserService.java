@@ -9,6 +9,6 @@ public interface UserService {
     Users getUserById(long id);
     void addUser(Users user);
     List<Users> getAllUsers();
-
-    void addTransactionToUser(long userId, Transactions transaction);
+    void showAllUsers();
+    void addTransactionToUser(Users user, Transactions transaction);
 }

@@ -36,10 +36,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void addTransactionToUser(long userId, Transactions transaction) {
-        Users users = userRepository.getUserById(userId);
-        if(users != null) {
-            users.addTransaction(transaction);
+    public void addTransactionToUser(Users user, Transactions transaction) {
+        if(user != null) {
+            transaction.setUser(user);
+
+            transactionsRepository.saveTransaction(transaction);
+
+            user.addTransaction(transaction);
         }
     }
+
+    public void showAllUsers(){
+        List<Users> allUsers = getAllUsers();
+        allUsers.forEach(user -> log.info("User: {}", user));
+    }
+
 }

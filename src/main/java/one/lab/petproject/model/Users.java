@@ -3,7 +3,6 @@ package one.lab.petproject.model;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.context.annotation.Primary;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

@@ -1,7 +1,6 @@
 package one.lab.petproject.repository;
 
 import one.lab.petproject.model.Users;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 

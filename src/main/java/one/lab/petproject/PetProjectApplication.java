@@ -8,6 +8,7 @@ import one.lab.petproject.model.Transactions;
 import one.lab.petproject.model.Users;
 import one.lab.petproject.service.TransactionService;
 import one.lab.petproject.service.UserService;
+import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -29,31 +30,43 @@ public class PetProjectApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        userService.showAllUsers();
         var user1 = Users.builder()
-                .id(1L)
-                .username("DzoTo")
+                .id(2L)
+                .username("Ask")
                 .password("qwe123")
-                .email("test@gmail.com")
+                .email("test2@gmail.com")
                 .createdAt(LocalDateTime.now())
                 .categories(null)
                 .transactionsList(null)
                 .build();
+        userService.addUser(user1);
+
+
         var transaction1 = Transactions.builder()
-                .id(1L)
-                .amount(500)
+                .id(2L)
+                .amount(3500)
                 .date(LocalDateTime.now())
-                .description("Payment for ice cream")
+                .description("Payment for I'm")
                 .transactionType(TransactionType.EXPENSE)
                 .user(null)
                 .category(null)
                 .build();
-        userService.addUser(user1);
-        log.info("User added: {}", user1);
-        transactionService.saveTransaction(transaction1);
-        log.info("Transaction added: {}", transaction1);
 
-        userService.addTransactionToUser(1L, transaction1);
-        var updatedUser = userService.getUserById(1L);
-        log.info("The transactions of user: {}", updatedUser.getTransactionsList());
+        userService.showAllUsers();
+        userService.addTransactionToUser(user1, transaction1);
+
+
+        showTransactionsOfUser(user1);
+    }
+
+    public void showTransactionsOfUser(Users user){
+        if (user.getTransactionsList() != null) {
+            user.getTransactionsList().forEach(transaction ->
+                    log.info("Transaction: {}", transaction)
+            );
+        } else {
+            log.info("No transactions found for user: {}", user.getUsername());
+        }
     }
 }

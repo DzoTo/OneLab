@@ -1,51 +1,54 @@
 package one.lab.petproject.repository.impl;
 
+import lombok.RequiredArgsConstructor;
 import one.lab.petproject.model.Users;
 import one.lab.petproject.repository.UserRepository;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 @Repository
+@RequiredArgsConstructor
 public class UserRepositoryImpl implements UserRepository {
-    private final List<Users> users = new ArrayList<>();
-//Users.builder()
-//        .id(1L)
-//                    .username("user1")
-//                    .password("password1")
-//                    .email("test1@gmail.com")
-//                    .createdAt(LocalDateTime.now())
-//            .build(),
-//            Users.builder()
-//                    .id(2L)
-//                    .username("user2")
-//                    .password("password2")
-//                    .email("test2@gmail.com")
-//                    .createdAt(LocalDateTime.now())
-//            .build(),
-//            Users.builder()
-//                    .id(3L)
-//                    .username("user3")
-//                    .password("password3")
-//                    .email("test3@gmail.com")
-//                    .createdAt(LocalDateTime.now())
-//            .build()
+
+
+    private final JdbcTemplate jdbcTemplate;
+
     @Override
     public Users getUserById(long id) {
-        return users.stream()
-                .filter(user -> user.getId() == id)
-                .findFirst()
-                .orElse(null);
+        String sql = "select * from users where id = ?";
+        return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> mapRow(rs), id);
     }
 
     @Override
     public void saveUser(Users user) {
-        users.add(user);
+        String sql = "INSERT INTO users (username, password, email, created_at) VALUES (?, ?, ?, ?)";
+        jdbcTemplate.update(sql, user.getUsername(), user.getPassword(), user.getEmail(), user.getCreatedAt());
     }
 
     @Override
     public List<Users> getAllUsers() {
-        return users;
+        String sql = "SELECT * FROM users";
+        return jdbcTemplate.query(sql, (rs, rowNum) -> Users.builder()
+                .id(rs.getLong("id"))
+                .username(rs.getString("username"))
+                .password(rs.getString("password"))
+                .email(rs.getString("email"))
+                .createdAt(rs.getTimestamp("created_at").toLocalDateTime())
+                .build());
     }
+
+    private Users mapRow(ResultSet rs) throws SQLException {
+        return Users.builder()
+                .id(rs.getLong("id"))
+                .username(rs.getString("username"))
+                .password(rs.getString("password"))
+                .email(rs.getString("email"))
+                .createdAt(rs.getTimestamp("created_at").toLocalDateTime())
+                .build();
+    }
+
 }
