@@ -32,25 +32,19 @@ public class PetProjectApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
         userService.showAllUsers();
         var user1 = Users.builder()
-                .id(2L)
                 .username("Ask")
                 .password("qwe123")
                 .email("test2@gmail.com")
                 .createdAt(LocalDateTime.now())
-                .categories(null)
-                .transactionsList(null)
                 .build();
         userService.addUser(user1);
 
 
         var transaction1 = Transactions.builder()
-                .id(2L)
                 .amount(3500)
                 .date(LocalDateTime.now())
                 .description("Payment for I'm")
                 .transactionType(TransactionType.EXPENSE)
-                .user(null)
-                .category(null)
                 .build();
 
         userService.showAllUsers();

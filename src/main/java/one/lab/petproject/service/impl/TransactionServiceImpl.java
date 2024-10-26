@@ -16,16 +16,16 @@ public class TransactionServiceImpl implements TransactionService {
     private final TransactionsRepository transactionsRepository;
     @Override
     public Transactions getTransactionById(Long id) {
-        return transactionsRepository.getTransactionById(id);
+        return transactionsRepository.getById(id);
     }
 
     @Override
     public void saveTransaction(Transactions transaction) {
-        transactionsRepository.saveTransaction(transaction);
+        transactionsRepository.save(transaction);
     }
 
     @Override
     public List<Transactions> getAllTransactions() {
-        return transactionsRepository.getAllTransactions();
+        return transactionsRepository.findAll();
     }
 }

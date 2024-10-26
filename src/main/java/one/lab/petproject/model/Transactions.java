@@ -1,23 +1,31 @@
 package one.lab.petproject.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.ToString;
+import jakarta.persistence.*;
+import lombok.*;
 import one.lab.petproject.enums.TransactionType;
 
 import java.time.LocalDateTime;
 
+@Entity
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
+@Table(name = "transactions")
 public class Transactions {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private double amount;
     private LocalDateTime date;
     private String description;
+    @Enumerated(EnumType.STRING)
     private TransactionType transactionType;
+    @ManyToOne
+    @JoinColumn(name = "category_id")
     private Category category;
+    @ManyToOne
+    @JoinColumn(name ="user_id")
     private Users user;
 
     @Override
